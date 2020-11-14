@@ -11,7 +11,7 @@
    >
 
     <StackPanel>
-        <ListView ItemsSource="{x:Bind Timers.TimerList}" Name="listView">
+        <ListView Name="listView" ItemsSource="{x:Bind Timers.TimerList}">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsStackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"/>

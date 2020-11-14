@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -36,14 +37,14 @@ namespace UltraStreamTimer
             /*int index = myList.Items.IndexOf((e.OriginalSource as FrameworkElement).DataContext);
             if (index == myList.Items.Count - 1)
                 myList.Items.Insert(index, new TimerObject());*/
-
+            Debug.WriteLine(Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Timers.AddTimer();
-            listView.ItemsSource = null;
-            listView.ItemsSource = Timers.TimerList;
+            /*listView.ItemsSource = null;
+            listView.ItemsSource = Timers.TimerList;*/
         }
     }
 }
