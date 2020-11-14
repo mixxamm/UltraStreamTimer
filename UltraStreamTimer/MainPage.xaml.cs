@@ -127,5 +127,12 @@ namespace UltraStreamTimer
         {
             dispatcherTimer.Stop();
         }
+
+        private void AddSeconds_Click(object sender, RoutedEventArgs e)
+        {
+            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            Debug.WriteLine(index);
+            Timers.TimerList.ElementAt(index).Seconds += int.Parse((sender as Windows.UI.Xaml.Controls.Button).Content.ToString().Substring(1));
+        }
     }
 }

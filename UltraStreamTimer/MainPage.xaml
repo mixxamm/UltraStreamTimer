@@ -22,6 +22,11 @@
                     <StackPanel>
                         <Button Content="{x:Bind Seconds, Mode=OneWay}" Click="ListButton_Click"/>
                         <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
+                        <Button Content="+10" Name="AddSeconds" Click="AddSeconds_Click"></Button>
+                        <Button Content="+20" Click="AddSeconds_Click"></Button>
+                        <Button Content="+30" Click="AddSeconds_Click"></Button>
+                        <Button Content="+40" Click="AddSeconds_Click"></Button>
+                        <Button Content="+50" Click="AddSeconds_Click"></Button>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
