@@ -1,23 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using UltraStreamTimer.Model;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,29 +19,20 @@ namespace UltraStreamTimer
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        
-        Windows.Storage.StorageFolder storageFolder =
+        private readonly Windows.Storage.StorageFolder storageFolder =
     Windows.Storage.ApplicationData.Current.LocalFolder;
-        DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        Windows.Storage.StorageFile timerFile;
+        private readonly DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             Timers = new Timers();
             dispatcherTimer.Tick += SubtractTime;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-            InitializeFile();
-        }
-
-        public async void InitializeFile()
-        {
-            timerFile =
-    await storageFolder.CreateFileAsync("timer.txt",
-        Windows.Storage.CreationCollisionOption.ReplaceExisting);
         }
         public Timers Timers { get; set; }
-        int index = 0;
-        IStorageFile storageFile;
+
+        private int index = 0;
+        private IStorageFile storageFile, allTimersFile;
 
 
 
@@ -67,7 +49,7 @@ namespace UltraStreamTimer
 
         private async void SubtractTime(object sender, object e)
         {
-            if(Timers.TimerList.ElementAt(index).Seconds > 0)
+            if (Timers.TimerList.ElementAt(index).Seconds > 0)
             {
                 Timers.TimerList.ElementAt(index).Seconds -= 1;
                 await SaveTimerToFile();
@@ -76,12 +58,12 @@ namespace UltraStreamTimer
             {
                 dispatcherTimer.Stop();
             }
-            
+
         }
 
         private async Task SaveTimerToFile()
         {
-            if(storageFile == null)
+            if (storageFile == null)
             {
                 dispatcherTimer.Stop();
                 PickFolder();
@@ -98,7 +80,7 @@ namespace UltraStreamTimer
                     PickFolder();
                 }
             }
-            
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -116,8 +98,10 @@ namespace UltraStreamTimer
 
         private async void PickFolder()
         {
-            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
-            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            Windows.Storage.Pickers.FolderPicker folderPicker = new Windows.Storage.Pickers.FolderPicker
+            {
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop
+            };
             folderPicker.FileTypeFilter.Add("*");
 
             Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
@@ -127,14 +111,30 @@ namespace UltraStreamTimer
                 // (including other sub-folder contents)
                 Windows.Storage.AccessCache.StorageApplicationPermissions.
                 FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                var storageFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("PickedFolderToken");
+                StorageFolder storageFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("PickedFolderToken");
                 storageFile = await storageFolder.CreateFileAsync("timer.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                allTimersFile = await storageFolder.CreateFileAsync("all_timers.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
             }
         }
 
-        private void StopTimer_Click(object sender, RoutedEventArgs e)
+        private async void StopTimer_Click(object sender, RoutedEventArgs e)
         {
             dispatcherTimer.Stop();
+            StringBuilder stringBuilder = new StringBuilder();
+            List<TimerObject> list = Timers.TimerList.ToList();
+            list.Sort();
+            list.ForEach(timerObject =>
+            {
+                stringBuilder.AppendLine($"{timerObject.Name}: {timerObject.Seconds}");
+            });
+            if (storageFile == null)
+            {
+                PickFolder();
+            }
+            else
+            {
+                await FileIO.WriteTextAsync(allTimersFile, stringBuilder.ToString());
+            }
         }
 
         private void AddSeconds_Click(object sender, RoutedEventArgs e)

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace UltraStreamTimer.Model
 {
-    public class TimerObject : INotifyPropertyChanged
+    public class TimerObject : INotifyPropertyChanged, IComparable
     {
         private string name;
         private int seconds;
@@ -33,6 +34,14 @@ namespace UltraStreamTimer.Model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is TimerObject)
+                return ((TimerObject)obj).Seconds.CompareTo(seconds);
+            else
+                return 0;
         }
     }
 }
