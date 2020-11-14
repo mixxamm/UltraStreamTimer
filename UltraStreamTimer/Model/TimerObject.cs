@@ -15,8 +15,9 @@ namespace UltraStreamTimer.Model
             }
         }
 
-        public TimerObject()
+        public TimerObject(string name)
         {
+            Name = name;
             Seconds = 60;
         }
 

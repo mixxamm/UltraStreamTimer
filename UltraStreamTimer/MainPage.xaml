@@ -28,5 +28,6 @@
             <x:String>StartBtn</x:String>
         </ListView>
         <Button Content="Add timer" Click="Button_Click"></Button>
+        <TextBox Name="Name"/>
     </StackPanel>
 </Page>

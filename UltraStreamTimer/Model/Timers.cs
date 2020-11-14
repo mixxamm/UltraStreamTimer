@@ -20,9 +20,9 @@ namespace UltraStreamTimer.Model
             /*TimerList.CollectionChanged += TimerList_CollectionChanged;*/
         }
 
-        public void AddTimer()
+        public void AddTimer(string name)
         {
-            TimerList.Add(new TimerObject());
+            TimerList.Add(new TimerObject(name));
         }
         
 /*        void TimerList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
