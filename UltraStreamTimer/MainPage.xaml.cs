@@ -32,11 +32,11 @@ namespace UltraStreamTimer
         public Timers Timers { get; set; }
 
         private int index = 0;
-        private IStorageFile storageFile, allTimersFile;
+        private IStorageFile storageFile, allTimersFile, currentTimerName;
 
 
 
-        private void ListButton_Click(object sender, RoutedEventArgs e)
+        private async void ListButton_Click(object sender, RoutedEventArgs e)
         {
             int newIndex = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
             bool indexChanged = index != newIndex;
@@ -44,9 +44,21 @@ namespace UltraStreamTimer
             index = newIndex;
             Debug.WriteLine(index);
             if (dispatcherTimer.IsEnabled && !indexChanged)
-                dispatcherTimer.Stop();
+                StopTimer();
             else
-            dispatcherTimer.Start();
+            {
+                dispatcherTimer.Start();
+                if (storageFile == null)
+                {
+                    dispatcherTimer.Stop();
+                    PickFolder();
+                }
+                else
+                {
+                    await FileIO.WriteTextAsync(currentTimerName, $"{Timers.TimerList.ElementAt(index).Name}");
+                }
+            }
+                
         }
 
         private async void SubtractTime(object sender, object e)
@@ -58,7 +70,7 @@ namespace UltraStreamTimer
             }
             else
             {
-                dispatcherTimer.Stop();
+                StopTimer();
             }
 
         }
@@ -116,10 +128,11 @@ namespace UltraStreamTimer
                 StorageFolder storageFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("PickedFolderToken");
                 storageFile = await storageFolder.CreateFileAsync("timer.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
                 allTimersFile = await storageFolder.CreateFileAsync("all_timers.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
+                currentTimerName = await storageFolder.CreateFileAsync("current_timer_name.txt", CreationCollisionOption.ReplaceExisting);
             }
         }
 
-        private async void StopTimer_Click(object sender, RoutedEventArgs e)
+        private async void StopTimer()
         {
             dispatcherTimer.Stop();
             StringBuilder stringBuilder = new StringBuilder();
