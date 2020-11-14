@@ -67,8 +67,16 @@ namespace UltraStreamTimer
 
         private async void SubtractTime(object sender, object e)
         {
-            Timers.TimerList.ElementAt(index).Seconds -= 1;
-            await SaveTimerToFile();
+            if(Timers.TimerList.ElementAt(index).Seconds > 0)
+            {
+                Timers.TimerList.ElementAt(index).Seconds -= 1;
+                await SaveTimerToFile();
+            }
+            else
+            {
+                dispatcherTimer.Stop();
+            }
+            
         }
 
         private async Task SaveTimerToFile()

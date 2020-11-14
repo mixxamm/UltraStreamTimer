@@ -27,6 +27,7 @@
                         <Button Content="+30" Click="AddSeconds_Click"></Button>
                         <Button Content="+40" Click="AddSeconds_Click"></Button>
                         <Button Content="+50" Click="AddSeconds_Click"></Button>
+                        <Button Content="--10" Click="AddSeconds_Click"></Button>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
