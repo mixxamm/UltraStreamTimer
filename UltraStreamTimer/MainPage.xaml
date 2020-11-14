@@ -29,5 +29,6 @@
         </ListView>
         <Button Content="Add timer" Click="Button_Click"></Button>
         <TextBox Name="Name"/>
+        <Button Content="Choose Folder" Name="ChooseFolder" Click="ChooseFolder_Click"></Button>
     </StackPanel>
 </Page>
