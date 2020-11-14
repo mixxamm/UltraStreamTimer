@@ -38,12 +38,14 @@ namespace UltraStreamTimer
 
         private void ListButton_Click(object sender, RoutedEventArgs e)
         {
-            /*int index = myList.Items.IndexOf((e.OriginalSource as FrameworkElement).DataContext);
-            if (index == myList.Items.Count - 1)
-                myList.Items.Insert(index, new TimerObject());*/
-            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            int newIndex = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            bool indexChanged = index != newIndex;
+
+            index = newIndex;
             Debug.WriteLine(index);
-            Timers.TimerList.ElementAt(index).Seconds -= 1;
+            if (dispatcherTimer.IsEnabled && !indexChanged)
+                dispatcherTimer.Stop();
+            else
             dispatcherTimer.Start();
         }
 
@@ -137,11 +139,12 @@ namespace UltraStreamTimer
             }
         }
 
-        private void AddSeconds_Click(object sender, RoutedEventArgs e)
+        private async void AddSeconds_Click(object sender, RoutedEventArgs e)
         {
             index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
             Debug.WriteLine(index);
             Timers.TimerList.ElementAt(index).Seconds += int.Parse((sender as Windows.UI.Xaml.Controls.Button).Content.ToString().Substring(1));
+            await SaveTimerToFile();
         }
     }
 }
