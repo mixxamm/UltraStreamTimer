@@ -47,6 +47,7 @@ namespace UltraStreamTimer
                 StopTimer();
             else
             {
+                await SaveTimerToFile();
                 dispatcherTimer.Start();
                 if (storageFile == null)
                 {
@@ -132,6 +133,21 @@ namespace UltraStreamTimer
             }
         }
 
+        private async void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            Timers.TimerList.ElementAt(index).Seconds = 60;
+            await SaveTimerToFile();
+            if (storageFile == null)
+            {
+                PickFolder();
+            }
+            else
+            {
+                await FileIO.WriteTextAsync(currentTimerName, $"{Timers.TimerList.ElementAt(index).Name}");
+            }
+        }
+
         private async void StopTimer()
         {
             dispatcherTimer.Stop();
@@ -155,9 +171,16 @@ namespace UltraStreamTimer
         private async void AddSeconds_Click(object sender, RoutedEventArgs e)
         {
             index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
-            Debug.WriteLine(index);
             Timers.TimerList.ElementAt(index).Seconds += int.Parse((sender as Windows.UI.Xaml.Controls.Button).Content.ToString().Substring(1));
             await SaveTimerToFile();
+            if (storageFile == null)
+            {
+                PickFolder();
+            }
+            else
+            {
+                await FileIO.WriteTextAsync(currentTimerName, $"{Timers.TimerList.ElementAt(index).Name}");
+            }
         }
     }
 }
