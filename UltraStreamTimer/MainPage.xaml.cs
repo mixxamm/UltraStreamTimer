@@ -25,19 +25,17 @@ namespace UltraStreamTimer
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
         public MainPage()
         {
             this.InitializeComponent();
             Timers = new Timers();
-            timer = new Timer(1000);
-            timer.AutoReset = true;
-            timer.Elapsed += new ElapsedEventHandler(SubtractTime);
+            dispatcherTimer.Tick += SubtractTime;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
         }
 
         public Timers Timers { get; set; }
         int index = 0;
-        Timer timer;
-
 
 
 
@@ -49,10 +47,10 @@ namespace UltraStreamTimer
             index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
             Debug.WriteLine(index);
             Timers.TimerList.ElementAt(index).Seconds -= 1;
-            /*timer.Start();*/
+            dispatcherTimer.Start();
         }
 
-        private void SubtractTime(object sender, ElapsedEventArgs e)
+        private void SubtractTime(object sender, object e)
         {
             Timers.TimerList.ElementAt(index).Seconds -= 1;
         }
