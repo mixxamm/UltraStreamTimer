@@ -96,6 +96,7 @@ namespace UltraStreamTimer
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Timers.AddTimer(Name.Text);
+            Name.Text = "";
             /*listView.ItemsSource = null;
             listView.ItemsSource = Timers.TimerList;*/
         }
