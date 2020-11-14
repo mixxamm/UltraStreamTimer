@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UltraStreamTimer.Model;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,6 +26,24 @@ namespace UltraStreamTimer
         public MainPage()
         {
             this.InitializeComponent();
+            Timers = new Timers();
+        }
+
+        public Timers Timers { get; set; }
+
+        private void ListButton_Click(object sender, RoutedEventArgs e)
+        {
+            /*int index = myList.Items.IndexOf((e.OriginalSource as FrameworkElement).DataContext);
+            if (index == myList.Items.Count - 1)
+                myList.Items.Insert(index, new TimerObject());*/
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Timers.AddTimer();
+            listView.ItemsSource = null;
+            listView.ItemsSource = Timers.TimerList;
         }
     }
 }
