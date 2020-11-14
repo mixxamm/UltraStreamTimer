@@ -1,27 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace UltraStreamTimer.Model
 {
     public class TimerObject : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public int Seconds { get; set; }
+        private string name;
+        private int seconds;
+
+        public string Name { get => name; set { name = value; RaisePropertyChanged("Name"); } }
+        public int Seconds { get => seconds; set
+            {
+                seconds = value;
+                RaisePropertyChanged("Seconds");
+            }
+        }
 
         public TimerObject()
         {
             Seconds = 60;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public override string ToString()
         {
-            return Name?? $"Naam {Seconds}";
+            return Name ?? $"Naam {Seconds}";
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void RaisePropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
 }

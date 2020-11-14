@@ -19,7 +19,7 @@
             </ListView.ItemsPanel>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local1:TimerObject">
-                    <Button Content="{Binding}" Click="ListButton_Click"/>
+                    <Button Content="{x:Bind Seconds, Mode=OneWay}" Click="ListButton_Click"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <x:String>StartBtn</x:String>
