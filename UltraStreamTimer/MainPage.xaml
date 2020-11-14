@@ -27,6 +27,7 @@
             </ListView.ItemTemplate>
             <x:String>StartBtn</x:String>
         </ListView>
+        <Button Name="StopTimer" Content="StopTimer" Click="StopTimer_Click"></Button>
         <Button Content="Add timer" Click="Button_Click"></Button>
         <TextBox Name="Name"/>
         <Button Content="Choose Folder" Name="ChooseFolder" Click="ChooseFolder_Click"></Button>

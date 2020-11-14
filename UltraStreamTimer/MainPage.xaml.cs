@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Timers;
 using UltraStreamTimer.Model;
 using Windows.Foundation;
@@ -67,7 +68,29 @@ namespace UltraStreamTimer
         private async void SubtractTime(object sender, object e)
         {
             Timers.TimerList.ElementAt(index).Seconds -= 1;
-            await Windows.Storage.FileIO.WriteTextAsync(storageFile, $"{Timers.TimerList.ElementAt(index).Seconds}");
+            await SaveTimerToFile();
+        }
+
+        private async Task SaveTimerToFile()
+        {
+            if(storageFile == null)
+            {
+                dispatcherTimer.Stop();
+                PickFolder();
+            }
+            else
+            {
+                try
+                {
+                    await FileIO.WriteTextAsync(storageFile, $"{Timers.TimerList.ElementAt(index).Seconds}");
+                }
+                catch (Exception)
+                {
+                    dispatcherTimer.Stop();
+                    PickFolder();
+                }
+            }
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -77,7 +100,12 @@ namespace UltraStreamTimer
             listView.ItemsSource = Timers.TimerList;*/
         }
 
-        private async void ChooseFolder_Click(object sender, RoutedEventArgs e)
+        private void ChooseFolder_Click(object sender, RoutedEventArgs e)
+        {
+            PickFolder();
+        }
+
+        private async void PickFolder()
         {
             var folderPicker = new Windows.Storage.Pickers.FolderPicker();
             folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
@@ -93,6 +121,11 @@ namespace UltraStreamTimer
                 var storageFolder = await StorageApplicationPermissions.FutureAccessList.GetFolderAsync("PickedFolderToken");
                 storageFile = await storageFolder.CreateFileAsync("timer.txt", Windows.Storage.CreationCollisionOption.ReplaceExisting);
             }
+        }
+
+        private void StopTimer_Click(object sender, RoutedEventArgs e)
+        {
+            dispatcherTimer.Stop();
         }
     }
 }
