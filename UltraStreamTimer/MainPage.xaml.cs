@@ -89,10 +89,9 @@ namespace UltraStreamTimer
                 {
                     await FileIO.WriteTextAsync(storageFile, $"{Timers.TimerList.ElementAt(index).Seconds}");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    dispatcherTimer.Stop();
-                    PickFolder();
+                    Console.WriteLine(ex.Message);
                 }
             }
 
