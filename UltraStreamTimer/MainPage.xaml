@@ -11,29 +11,45 @@
    >
 
     <StackPanel Margin="10">
-        <ListView Name="listView" ItemsSource="{x:Bind Timers.TimerList}">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsStackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local1:TimerObject">
-                    <StackPanel>
-                        <Button Content="{x:Bind Seconds, Mode=OneWay}" Click="ListButton_Click"/>
-                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
-                        <Button Content="+10" Name="AddSeconds" Click="AddSeconds_Click"></Button>
-                        <Button Content="+20" Click="AddSeconds_Click"></Button>
-                        <Button Content="+30" Click="AddSeconds_Click"></Button>
-                        <Button Content="+40" Click="AddSeconds_Click"></Button>
-                        <Button Content="+50" Click="AddSeconds_Click"></Button>
-                        <Button Content="--10" Click="AddSeconds_Click"></Button>
-                        <Button Content="Reset" Name="ResetButton" Click="ResetButton_Click"></Button>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <x:String>StartBtn</x:String>
-        </ListView>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Margin="10, 260, 10, 10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Name="KTextBox"/>
+                    <Button Content="C" Name="ClearK" Click="ClearK_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Name="MTextBox"/>
+                    <Button Content="C" Name="ClearM" Click="ClearM_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <ListView Name="listView" ItemsSource="{x:Bind Timers.TimerList}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Horizontal" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local1:TimerObject">
+                        <StackPanel>
+                            <Button Content="{x:Bind Seconds, Mode=OneWay}" Click="ListButton_Click"/>
+                            <TextBlock Text="{x:Bind Name, Mode=OneWay}" />
+                            <Button Content="+10" Name="AddSeconds" Click="AddSeconds_Click"></Button>
+                            <Button Content="+20" Click="AddSeconds_Click"></Button>
+                            <Button Content="+30" Click="AddSeconds_Click"></Button>
+                            <Button Content="+40" Click="AddSeconds_Click"></Button>
+                            <Button Content="+50" Click="AddSeconds_Click"></Button>
+                            <Button Content="--10" Click="AddSeconds_Click"></Button>
+                            <Button Content="Reset" Name="ResetButton" Click="ResetButton_Click"></Button>
+
+                            <Button Content="K" Name="AddKButton" Click="AddKButton_Click"></Button>
+                            <Button Content="M" Name="AddMButton" Click="AddMButton_Click"></Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <x:String>StartBtn</x:String>
+            </ListView>
+        </StackPanel>
+        
         <Button Content="Add timer" Click="Button_Click" Margin="0,10,0,0"></Button>
         <TextBox Name="Name"/>
         <Button Content="Choose Folder" Name="ChooseFolder" Click="ChooseFolder_Click"></Button>

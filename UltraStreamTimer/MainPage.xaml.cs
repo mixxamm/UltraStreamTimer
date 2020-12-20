@@ -144,18 +144,66 @@ namespace UltraStreamTimer
             else
             {
                 await FileIO.WriteTextAsync(currentTimerName, $"{Timers.TimerList.ElementAt(index).Name}");
+                UpdateAllTimersFile();
             }
         }
 
-        private async void StopTimer()
+        private async void AddKButton_Click(object sender, RoutedEventArgs e)
+        {
+            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            try
+            {
+                Timers.TimerList.ElementAt(index).Seconds += int.Parse(KTextBox.Text) * 1000;
+                await SaveTimerToFile();
+                UpdateAllTimersFile();
+                KTextBox.Text = (int.Parse(KTextBox.Text) * -1).ToString();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private async void AddMButton_Click(object sender, RoutedEventArgs e)
+        {
+            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            try
+            {
+                Timers.TimerList.ElementAt(index).Seconds += (int)(double.Parse(MTextBox.Text) * 1000000.0);
+                await SaveTimerToFile();
+                UpdateAllTimersFile();
+                MTextBox.Text = (double.Parse(MTextBox.Text) * -1).ToString();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        private void StopTimer()
         {
             dispatcherTimer.Stop();
+            UpdateAllTimersFile();
+        }
+
+        private void ClearK_Click(object sender, RoutedEventArgs e)
+        {
+            KTextBox.Text = "";
+        }
+
+        private void ClearM_Click(object sender, RoutedEventArgs e)
+        {
+            MTextBox.Text = "";
+        }
+
+        private async void UpdateAllTimersFile()
+        {
             StringBuilder stringBuilder = new StringBuilder();
             List<TimerObject> list = Timers.TimerList.ToList();
             list.Sort();
             list.ForEach(timerObject =>
             {
-                stringBuilder.AppendLine($"{timerObject.Name}: {timerObject.Seconds}");
+                stringBuilder.AppendLine($"{timerObject.Name}: {timerObject.Seconds.ToString("N0")}");
             });
             if (storageFile == null)
             {
@@ -179,6 +227,7 @@ namespace UltraStreamTimer
             else
             {
                 await FileIO.WriteTextAsync(currentTimerName, $"{Timers.TimerList.ElementAt(index).Name}");
+                UpdateAllTimersFile();
             }
         }
     }
