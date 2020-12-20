@@ -196,6 +196,21 @@ namespace UltraStreamTimer
             MTextBox.Text = "";
         }
 
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            index = Timers.TimerList.IndexOf((TimerObject)(e.OriginalSource as FrameworkElement).DataContext);
+            try
+            {
+                Timers.TimerList.ElementAt(index).Seconds += 2000000;
+                await SaveTimerToFile();
+                UpdateAllTimersFile();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         private async void UpdateAllTimersFile()
         {
             StringBuilder stringBuilder = new StringBuilder();

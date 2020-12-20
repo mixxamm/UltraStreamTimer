@@ -43,6 +43,7 @@
 
                             <Button Content="K" Name="AddKButton" Click="AddKButton_Click"></Button>
                             <Button Content="M" Name="AddMButton" Click="AddMButton_Click"></Button>
+                            <Button Content="Start" Name="StartButton" Click="StartButton_Click"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
